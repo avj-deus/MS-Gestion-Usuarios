@@ -1,6 +1,7 @@
 package com.cice.gestionusuarios.msgestionusuarios.service.impl;
 
 import com.cice.gestionusuarios.msgestionusuarios.entity.UsuarioEntity;
+import com.cice.gestionusuarios.msgestionusuarios.feign.IProductoFeign;
 import com.cice.gestionusuarios.msgestionusuarios.repository.IUsuarioRepository;
 import com.cice.gestionusuarios.msgestionusuarios.service.IUsuariosService;
 import com.cice.gestionusuarios.msgestionusuarios.web.dto.UsuarioDTO;
@@ -15,6 +16,9 @@ public class UsuarioService implements IUsuariosService {
 
     @Autowired
     IUsuarioRepository usuarioRepository;
+
+    @Autowired
+    IProductoFeign productoFeign;
 
     @Override
     public UsuarioDTO crearUsuario(String user, String pass) {
@@ -31,7 +35,8 @@ public class UsuarioService implements IUsuariosService {
 
     @Override
     public UsuarioDTO getUsuario(String user, String pass) {
-        return null;
+        UsuarioEntity usuarioEntity = usuarioRepository.findUsuarioEntityByUserAndPass(user, pass);
+        return new UsuarioDTO(usuarioEntity.getIdUsuario(), usuarioEntity.getUser(), usuarioEntity.getPass());
     }
 
     @Override
@@ -55,6 +60,8 @@ public class UsuarioService implements IUsuariosService {
 
     @Override
     public UsuarioDTO eliminarUsuario(Long idUsuario) {
+        usuarioRepository.deleteById(idUsuario);
+        productoFeign.eliminarProductoByIdUsuario(idUsuario);
         return null;
     }
 }

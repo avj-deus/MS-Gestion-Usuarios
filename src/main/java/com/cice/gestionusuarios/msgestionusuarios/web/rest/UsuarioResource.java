@@ -47,5 +47,16 @@ public class UsuarioResource {
         return ResponseEntity.ok(usuariosService.getUsuario(1L));
     }
 
+    @RequestMapping(value = "/usuario/{user}/{pass}", method = RequestMethod.GET)
+    public ResponseEntity<UsuarioDTO> recuperarUsuarioRegistrado(@PathVariable String user, @PathVariable String pass) {
+        UsuarioDTO usuarioDTO = usuariosService.getUsuario(user, pass);
+        return ResponseEntity.ok(usuarioDTO);
+    }
+
+    @RequestMapping(value = "/usuario/{idUsuario}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> eliminarUsuarioYTodosSusProductos(@PathVariable Long idUsuario){
+        usuariosService.eliminarUsuario(idUsuario);
+        return ResponseEntity.ok("Todo ha ido bien...");
+    }
 
 }
